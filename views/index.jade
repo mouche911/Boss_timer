@@ -1,0 +1,52 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/css/index.css')
+  body
+    div.content
+      h3 BDO World Boss Timers
+      p A community driven effort to track world boss spawns.
+      p Currently, Discord is the only way for people to submit boss status updates (see <a href="#discord">below</a>).
+      p More updates are planned for the future pending clarification regarding boss spawn times.
+      hr
+
+      h4 Select a Server
+      form(action='', method='POST')
+        select(name="server")
+          each server, id in servers
+            option(value=id) #{server.name}
+        //- div.remember
+          //- label.checkbox.
+            //- <input type="checkbox" name="remember" value="remember-server" /> Remember this server
+        button(type='submit') Go!
+
+      div.clear
+      hr
+
+      //- h4 Boss Information
+      h4 Bosses Tracked
+      ul
+        each boss, id in bosses
+          li #{boss.name}
+            //- a(href='/boss/#{id}') #{boss.name}
+
+      hr
+
+      h4#discord Discord Bot
+      p.
+        I've created a wonderful Discord bot.<br/>
+        He can be added to your server by using <a href="https://discordapp.com/oauth2/authorize?&client_id=172801576904294400&scope=bot&permissions=134144">this form</a>.
+        Notifications will automatically be piped to any channel listed as 'alustin-bosses', 'orwen-bosses', etc.
+      p Alternatively, if you don't want to add him to your own server, you can find him hanging out <a href="https://discord.gg/0xsEpG6oz0vpGp17">here</a> and register for notifications for your server.
+      p We need your help recording when bosses are alive though. Ask bdowbt[bot] for `help` on Discord and help him out.
+
+
+    script.
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-75969009-2', 'auto');
+      ga('send', 'pageview');

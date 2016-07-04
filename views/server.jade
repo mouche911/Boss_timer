@@ -1,0 +1,47 @@
+extends layout
+
+block content
+  div.key
+    ul
+      li
+        span
+          strong Key:
+      li
+        span.green Alive
+      li
+        span.red Dead
+      //- li
+        //- span.orange Might be Alive
+      li
+        span.black Unknown
+      li.right
+        span
+          strong= server.name
+      li.right
+        span Current Server:
+
+  each boss, bid in bosses
+    div.boss
+      h4= boss.name
+      table
+        tr
+          th Channel
+          th Status Changed
+        each channel, cid in channels
+          tr.data
+            td(class=status[cid][bid].status)!= channel.replace(/{p}/, server.prefix)
+            td
+              - var date = new Date(status[cid][bid].statusChanged * 1000)
+              if status[cid][bid].statusChanged === null
+                span ~
+              else
+                span #{date.toLocaleDateString()} #{date.toLocaleTimeString()}
+      div.clear
+  //
+    div#notifications
+      h4 Notifications
+      hr
+      div#messages
+        p.message
+          strong - 19:13 GMT - &nbsp;
+          span Alustin - Mediah A1 - Bhastard Dheg - Alive (1 / 5)
