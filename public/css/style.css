@@ -1,0 +1,158 @@
+html {
+    min-width: 500px;
+}
+
+body {
+  padding: 50px;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  min-width: 410px;
+  height: 45px;
+  background-color: white;
+  border-bottom: 1px solid black;
+}
+
+.header ul {
+  height: 45px;
+  list-style-type: none;
+  padding-right: 40px;
+  margin: 0;
+}
+
+.header li {
+  height: 45px;
+  display: inline;
+  line-height: 45px;
+}
+
+.header a {
+  display: inline-block;
+  text-decoration: none;
+  height: 100%;
+}
+
+form span {
+  font-size: 14px;
+}
+
+.right {
+  float: right;
+}
+
+a {
+  color: #00B7FF;
+}
+
+.server-select {
+  margin-left: 5px;
+  margin-right: 5px;
+  padding-right: 10px;
+}
+
+/* KEY */
+.key {
+  font-size: 12px;
+}
+
+.key ul {
+  margin-top: 0;
+  padding-left: 0;
+  list-style: none;
+}
+
+.key li {
+  display: inline-block;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+/* BOSS */
+.boss {
+  padding: 0px 15px 15px;
+  border-radius: 5px;
+  border: 1px solid black;
+  margin: 0 5px 10px;
+  float: left;
+}
+
+table {
+  min-width: 350px;
+  font-size: 14px;
+}
+
+tr {
+  text-align: center;
+}
+
+tr:nth-child(odd) {
+  background-color: #EEE;
+}
+
+tr.data {
+  font-size: 13px;
+}
+
+.green, .orange, .red, .black {
+  font-weight: bold;
+}
+
+.green {
+  color: #11CC00;
+}
+
+.orange {
+  color: orange;
+}
+
+.red {
+  color: red;
+}
+
+.black {
+  color: black;
+}
+
+.clear {
+  clear: both;
+  font-size: 0;
+}
+
+#notifications {
+  height: 400px;
+  width: 100%;
+  min-width: 410px;
+  display: block;
+  clear: both;
+  border: 1px solid black;
+  border-radius: 5px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  overflow: hidden;
+}
+
+#notifications h4 {
+  margin: 8px 10px;
+}
+
+#notifications hr {
+  margin: 0;
+}
+
+#messages {
+  display: block;
+  overflow-y: scroll;
+  height: 364px;
+  width: 100%;
+  font-size: 13px;
+}
+
+.message {
+  margin: 3px 10px;
+}
