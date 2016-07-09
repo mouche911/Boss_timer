@@ -64,7 +64,7 @@ var bossDead = '__***Good job!***__ A little bird told me that {boss} is dead on
 
 
 var alreadyStatus = 'Thanks for letting me know, but we already knew you were '
-  +' going to say that. Keep on reporting though, it\'s the only way we can '
+  + 'going to say that. Keep on reporting though, it\'s the only way we can '
   + 'get our information <3';
 
 
@@ -84,5 +84,5 @@ module.exports = {
   bossAlive: bossAlive,
   bossDead: bossDead,
   alreadyStatus: alreadyStatus,
-  serverWide: serverWide
+  serverWide: serverWide,
 };
