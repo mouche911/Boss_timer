@@ -45,9 +45,10 @@ app.use('/', baseRoutes);
 app.use('/server', serverRoutes);
 
 
-var aliveMaxConf = 2;
-var deadMaxConf = 2;
-var botToken = 'MTc0NTU0NDk2MDkxODE1OTM3.CgEmCw.Y9fq3G4HXqbt44XdEs2bPdlemt4'; //'MTcyODAxOTU4MTkxNTYyNzUz.CfrF9w.a9v9MV8goDNNLJyMdH4tbvhWSgw';
+var ALIVE_MAX_CONF = 2;
+var DEAD_MAX_CONF = 2;
+var BOT_TOKEN = 'MTcONTUONDk2MDkxODE1OTM3.CgEmCw.Y9fq3G4HXpbt44XdEs2bPdlemt4'; // Example token
+
 
 // Catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -154,7 +155,7 @@ function addNotification(server, channel, boss, status, user) {
   // Broadcast to all Socket.IO connections
   var numReports = Object.keys(reports).length;
 
-  if ((status === 'alive' && numReports >= aliveMaxConf) || (status === 'dead' && numReports >= deadMaxConf)) {
+  if ((status === 'alive' && numReports >= ALIVE_MAX_CONF) || (status === 'dead' && numReports >= DEAD_MAX_CONF)) {
     updateStatus(server, tmpChannel, boss, status, serverWide);
   }
 
@@ -321,7 +322,9 @@ bot.on('message', function(msg) {
 
         var server = paramsArr[0];
         var channel = app.settings.channels.validChannels.indexOf(paramsArr[1]);
-        var channel = (channel === -1) ? app.settings.channels.validChannelsShort.indexOf(paramsArr[1]) : channel;
+        var channel = (channel === -1)
+          ? app.settings.channels.validChannelsShort.indexOf(paramsArr[1])
+          : channel;
         var boss = paramsArr[2];
         var status = paramsArr[3];
 
@@ -373,7 +376,9 @@ bot.on('message', function(msg) {
         message = message.replace(/{channel}/,
           app.settings.channels.channels[channel].replace(/{p}/, serverPrefix));
           message = message.replace(/{confNum}/, confNum);
-          message = message.replace(/{maxConf}/, (status === 'alive') ? aliveMaxConf : deadMaxConf);
+          message = message.replace(/{maxConf}/, (status === 'alive')
+            ? ALIVE_MAX_CONF
+            : DEAD_MAX_CONF);
 
           bot.sendMessage(msg.channel, message);
 
@@ -397,8 +402,12 @@ bot.on('message', function(msg) {
         var paramsArr = cmdParams.split(' ');
 
         var server = paramsArr[0];
-        var channel = (paramsArr.length > 1) ? app.settings.channels.validChannels.indexOf(paramsArr[1]) : null;
-        var channel = (channel === -1) ? app.settings.channels.validChannelsShort.indexOf(paramsArr[1]) : channel;
+        var channel = (paramsArr.length > 1)
+          ? app.settings.channels.validChannels.indexOf(paramsArr[1])
+          : null;
+        var channel = (channel === -1)
+          ? app.settings.channels.validChannelsShort.indexOf(paramsArr[1])
+          : channel;
 
         if (!app.settings.servers[server]) {
           bot.sendMessage(
@@ -458,7 +467,13 @@ bot.on('message', function(msg) {
               if (aliveOn.length > 0) {
                 message = message + '\r\n**' + app.settings.bosses[bkey].name + ':** ';
                 aliveOn.forEach(function(chnl, i) {
-                  message = message + ((i !== 0) ? ', ' : '') + app.settings.channels.channels[chnl].replace(/{p}/, app.settings.servers[server].prefix);
+                  var punctuation = (i !== 0)
+                    ? ', '
+                    : '';
+                  message = message
+                    + punctuation
+                    + app.settings.channels.channels[chnl].replace(
+                      /{p}/, app.settings.servers[server].prefix);
                 });
               }
             }

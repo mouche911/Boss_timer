@@ -13,7 +13,9 @@ router.get('/', function(req, res, next) {
 router.post('/', function(req, res, next) {
   var success = false;
 
-  var server = req.body.hasOwnProperty('server') ? req.body.server : null;
+  var server = req.body.hasOwnProperty('server')
+    ? req.body.server
+    : null;
 
   if (req.app.settings.servers.hasOwnProperty(server)) {
     success = true;
