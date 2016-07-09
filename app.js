@@ -4,23 +4,10 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
 var fs = require('fs');
+var sqlite3 = require('sqlite3').verbose();
 var discord = require('discord.js');
 
 var app = express();
-
-// Initialise DB
-var dbfile = 'data.sqlite';
-var sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database(dbfile, createTables);
-
-function createTables() {
-  db.run('CREATE TABLE IF NOT EXISTS notifys ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_name" TEXT(100) NOT NULL, "author_id" TEXT(70) NOT NULL, "server" TEXT(20) NOT NULL, "channel" TEXT(20) NOT NULL, "boss" TEXT(20) NOT NULL, "status" TEXT(10) NOT NULL, "timestamp" INTEGER NOT NULL)');
-  db.run('CREATE TABLE IF NOT EXISTS commands ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "author_name" TEXT(100) NOT NULL, "author_id" TEXT(70) NOT NULL, "cmd" TEXT(60) NOT NULL, "params" TEXT(100) NOT NULL, "timestamp" INTEGER NOT NULL)');
-}
-
-// Import Routes
-var baseRoutes = require('./routes/index');
-var serverRoutes = require('./routes/server');
 
 // Import Settings
 app.settings.servers = require('./settings/servers');
@@ -29,6 +16,27 @@ app.settings.bosses = require('./settings/bosses');
 
 app.settings.whitelists = require('./settings/whitelists');
 // app.settings.blacklists = require('./settings/blacklists');
+
+app.settings.sqlCommands = require('./settings/sqlcommands');
+
+
+var ALIVE_MAX_CONF = 2;
+var DEAD_MAX_CONF = 2;
+var BOT_TOKEN = 'MTcONTUONDk2MDkxODE1OTM3.CgEmCw.Y9fq3G4HXpbt44XdEs2bPdlemt4'; // Example token
+var DB_FILE = 'data.sqlite';
+
+
+// Initialise DB
+function createTables() {
+  db.run(app.settings.sqlCommands.createNotifys);
+  db.run(app.settings.sqlCommands.createCommands);
+}
+
+var db = new sqlite3.Database(DB_FILE, createTables);
+
+// Import Routes
+var baseRoutes = require('./routes/index');
+var serverRoutes = require('./routes/server');
 
 // View Engine Setup
 app.set('views', path.join(__dirname, 'views'));
@@ -43,12 +51,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', baseRoutes);
 app.use('/server', serverRoutes);
-
-
-var ALIVE_MAX_CONF = 2;
-var DEAD_MAX_CONF = 2;
-var BOT_TOKEN = 'MTcONTUONDk2MDkxODE1OTM3.CgEmCw.Y9fq3G4HXpbt44XdEs2bPdlemt4'; // Example token
-
 
 // Catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -385,7 +387,7 @@ bot.on('message', function(msg) {
 
       bot.sendMessage(msg.channel, message);
 
-      var stmt = db.prepare('INSERT INTO notifys (author_name, author_id, server, channel, boss, status, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?)');
+      var stmt = db.prepare(app.settings.sqlCommands.insertNotify);
       stmt.run(msg.author.name, msg.author.id, server, channel, boss, status, currentUnixTimestamp(),
         function(err) {
           if (err) {
@@ -496,7 +498,7 @@ bot.on('message', function(msg) {
     bot.sendMessage(msg.channel, 'Backed up status file.');
   }
 
-  var stmt = db.prepare('INSERT INTO commands (author_name, author_id, cmd, params, timestamp) VALUES(?, ?, ?, ?, ?)');
+  var stmt = db.prepare(app.settings.sqlCommands.insertCommand);
   stmt.run(msg.author.name, msg.author.id, cmd, cmdParams, currentUnixTimestamp(),
     function(err) {
       if (err) {
