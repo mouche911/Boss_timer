@@ -271,7 +271,7 @@ bot.on('message', function(msg) {
   var cmdParams = '';
   var isMention = false;
 
-  if (msg.content.indexOf(bot.user.mention()) == 0) { // Bot is mentioned at beginning of message
+  if (msg.content.indexOf(bot.user.mention()) === 0) { // Bot is mentioned at beginning of message
     if (msg.content.split(' ').length === 0) { // mention w/ no command
       // do nothing
     } else if (msg.content.split(' ').length === 1) { // mention w/ command
