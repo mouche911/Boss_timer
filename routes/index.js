@@ -5,7 +5,7 @@ var router = express.Router();
 router.get('/', function(req, res, next) {
   res.render('index', {
     servers: req.app.settings.servers,
-    bosses: req.app.settings.bosses
+    bosses: req.app.settings.bosses,
   });
 });
 
@@ -13,7 +13,9 @@ router.get('/', function(req, res, next) {
 router.post('/', function(req, res, next) {
   var success = false;
 
-  var server = req.body.hasOwnProperty('server') ? req.body.server : null;
+  var server = req.body.hasOwnProperty('server')
+    ? req.body.server
+    : null;
 
   if (req.app.settings.servers.hasOwnProperty(server)) {
     success = true;

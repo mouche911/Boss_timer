@@ -10,7 +10,7 @@ var channelNames = [
   'edan-bosses',
   'jordine-bosses',
   'orwen-bosses',
-  'uno-bosses'
+  'uno-bosses',
 ];
 
 /**
@@ -22,5 +22,5 @@ var notifyExtra = [
 
 module.exports = {
   channelNames: channelNames,
-  notifyExtra: notifyExtra
+  notifyExtra: notifyExtra,
 };
