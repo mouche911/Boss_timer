@@ -9,7 +9,7 @@ var discord = require('discord.js');
 var app = express();
 
 // Initialise DB
-var dbfile = "data.sqlite";
+var dbfile = 'data.sqlite';
 var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database(dbfile, createTables);
 
@@ -83,7 +83,7 @@ try {
   var status = fs.readFileSync('./status.js', 'utf-8');
   app.status = JSON.parse(status);
 } catch (err) {
-  console.log("Could not load status file", err);
+  console.log('Could not load status file', err);
 
   app.status = new Object();
   for (var skey in app.settings.servers) {
@@ -106,12 +106,12 @@ try {
         app.status[skey][ckey][bkey] = {
           lastDied: null,
           statusChanged: null,
-          status: "black",
+          status: 'black',
           //nextAliveMin: null,
           //nextAliveMax: null,
           reports: {
-            "alive": {},
-            "dead": {}
+            'alive': {},
+            'dead': {}
           }
         };
       }
@@ -475,7 +475,7 @@ bot.on('message', function(msg) {
 
     if (cmd === 'b4ckup') {
       saveStatusToFile();
-      bot.sendMessage(msg.channel, "Backed up status file.");
+      bot.sendMessage(msg.channel, 'Backed up status file.');
     }
 
     var stmt = db.prepare('INSERT INTO commands (author_name, author_id, cmd, params, timestamp) VALUES(?, ?, ?, ?, ?)');
