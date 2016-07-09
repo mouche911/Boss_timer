@@ -5,7 +5,7 @@ var router = express.Router();
 router.get('/', function(req, res, next) {
   res.render('index', {
     servers: req.app.settings.servers,
-    bosses: req.app.settings.bosses
+    bosses: req.app.settings.bosses,
   });
 });
 

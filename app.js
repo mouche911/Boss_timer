@@ -65,7 +65,7 @@ if (app.get('env') === 'development') {
     res.status(err.status || 500);
     res.render('error', {
       message: err.message,
-      error: err
+      error: err,
     });
   });
 }
@@ -75,7 +75,7 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error', {
     message: err.message,
-    error: {}
+    error: {},
   });
 });
 
@@ -112,8 +112,8 @@ try {
           //nextAliveMax: null,
           reports: {
             'alive': {},
-            'dead': {}
-          }
+            'dead': {},
+          },
         };
       }
     }
@@ -283,218 +283,221 @@ bot.on('message', function(msg) {
 
     if (cmd[0] === ' ') cmd = cmd.substring(1);
     isMention = true;
-    } else if (!msg.channel.server || app.settings.whitelists.channelNames.indexOf(msg.channel.name) !== -1) {
-      if (msg.content.indexOf(' ') !== -1) {
-        var firstSpace = msg.content.indexOf(' ');
-        cmd = msg.content.substring(0, firstSpace);
-      } else {
-        cmd = msg.content;
+  } else if (!msg.channel.server || app.settings.whitelists.channelNames.indexOf(msg.channel.name) !== -1) {
+    if (msg.content.indexOf(' ') !== -1) {
+      var firstSpace = msg.content.indexOf(' ');
+      cmd = msg.content.substring(0, firstSpace);
+    } else {
+      cmd = msg.content;
+    }
+  } else { // otherwise, do nothing
+    return;
+  }
+
+  if (msg.content.length > cmd.length && msg.content.indexOf(' ') !== -1) {
+    if (isMention) {
+      cmdParams = msg.content.substring(cmd.length + mention.length + 2);
+    } else {
+      cmdParams = msg.content.substring(cmd.length + 1);
+    }
+  }
+
+  cmd = cmd.toLowerCase();
+  cmdParams = cmdParams.toLowerCase();
+
+  if (cmd === '' || cmd === 'help') {
+    bot.sendMessage(msg.channel, discordText.about);
+  }
+
+  if (cmd === 'notify') {
+    if (cmdParams === '') {
+      bot.sendMessage(msg.channel, discordText.notifyHelp);
+    } else {
+      var paramsArr = cmdParams.split(' ');
+
+      if (paramsArr.length < 4) {
+        bot.sendMessage(msg.channel, discordText.notifyParamsMin);
+        return;
       }
-    } else { // otherwise, do nothing
-      return;
-    }
 
-    if (msg.content.length > cmd.length && msg.content.indexOf(' ') !== -1) {
-      if (isMention) {
-        cmdParams = msg.content.substring(cmd.length + mention.length + 2);
-      } else {
-        cmdParams = msg.content.substring(cmd.length + 1);
+      var server = paramsArr[0];
+      var channel = app.settings.channels.validChannels.indexOf(paramsArr[1]);
+      var channel = (channel === -1)
+        ? app.settings.channels.validChannelsShort.indexOf(paramsArr[1])
+        : channel;
+      var boss = paramsArr[2];
+      var status = paramsArr[3];
+
+      if (!app.settings.servers[server]) {
+        bot.sendMessage(
+          msg.channel,
+          discordText.notifyWrongServer.replace(/{server}/, server));
+          return;
       }
-    }
 
-    cmd = cmd.toLowerCase();
-    cmdParams = cmdParams.toLowerCase();
-
-    if (cmd === '' || cmd === 'help') {
-      bot.sendMessage(msg.channel, discordText.about);
-    }
-
-    if (cmd === 'notify') {
-      if (cmdParams === '') {
-        bot.sendMessage(msg.channel, discordText.notifyHelp);
-      } else {
-        var paramsArr = cmdParams.split(' ');
-
-        if (paramsArr.length < 4) {
-          bot.sendMessage(msg.channel, discordText.notifyParamsMin);
+      if (channel === -1) {
+        bot.sendMessage(
+          msg.channel,
+          discordText.notifyWrongChannel.replace(/{channel}/, paramsArr[1]));
           return;
-        }
+      }
 
-        var server = paramsArr[0];
-        var channel = app.settings.channels.validChannels.indexOf(paramsArr[1]);
-        var channel = (channel === -1)
-          ? app.settings.channels.validChannelsShort.indexOf(paramsArr[1])
-          : channel;
-        var boss = paramsArr[2];
-        var status = paramsArr[3];
-
-        if (!app.settings.servers[server]) {
-          bot.sendMessage(
-            msg.channel,
-            discordText.notifyWrongServer.replace(/{server}/, server));
-            return;
-        }
-
-        if (channel === -1) {
-          bot.sendMessage(
-            msg.channel,
-            discordText.notifyWrongChannel.replace(/{channel}/, paramsArr[1]));
-            return;
-        }
-
-        if (!app.settings.bosses[boss]) {
-          bot.sendMessage(
-            msg.channel,
-            discordText.notifyWrongBoss.replace(/{boss}/, boss));
-            return;
-        }
-
-        if (status !== 'dead' && status !== 'alive') {
-          bot.sendMessage(msg.channel, discordText.notifyWrongStatus);
+      if (!app.settings.bosses[boss]) {
+        bot.sendMessage(
+          msg.channel,
+          discordText.notifyWrongBoss.replace(/{boss}/, boss));
           return;
-        }
+      }
 
-        /* Check if already Dead/Alive */
-        if (app.status[server][channel][boss]['status'] === convertToCssStatus(status)) {
-          bot.sendMessage(msg.channel, discordText.alreadyStatus.replace(/{status}/, status));
-          return;
-        }
+      if (status !== 'dead' && status !== 'alive') {
+        bot.sendMessage(msg.channel, discordText.notifyWrongStatus);
+        return;
+      }
 
-        /* SUCCESS */
-        var message = '';
-
-        if (status === 'dead') {
-          message = discordText.deadConfirm;
-        } else {
-          message = discordText.aliveConfirm;
-        }
-
-        var confNum = addNotification(server, channel, boss, status, msg.author);
-        var serverPrefix = app.settings.servers[server].prefix;
-
-        message = message.replace(/{boss}/, app.settings.bosses[boss].name);
-        message = message.replace(/{channel}/,
-          app.settings.channels.channels[channel].replace(/{p}/, serverPrefix));
-          message = message.replace(/{confNum}/, confNum);
-          message = message.replace(/{maxConf}/, (status === 'alive')
-            ? ALIVE_MAX_CONF
-            : DEAD_MAX_CONF);
-
-          bot.sendMessage(msg.channel, message);
-
-          var stmt = db.prepare('INSERT INTO notifys (author_name, author_id, server, channel, boss, status, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?)');
-          stmt.run(msg.author.name, msg.author.id, server, channel, boss, status, currentUnixTimestamp(),
-          function(err) {
-            if (err) {
-              console.log(err);
-            } else {
-              //console.log(this.lastID);
-            }
-          }
+      /* Check if already Dead/Alive */
+      if (app.status[server][channel][boss]['status'] === convertToCssStatus(status)) {
+        bot.sendMessage(
+          msg.channel,
+          discordText.alreadyStatus.replace(/{status}/, status)
         );
+        return;
       }
-    }
 
-    if (cmd === 'query') {
-      if (cmdParams === '') {
-        bot.sendMessage(msg.channel, discordText.queryHelp);
+      /* SUCCESS */
+      var message = '';
+
+      if (status === 'dead') {
+        message = discordText.deadConfirm;
       } else {
-        var paramsArr = cmdParams.split(' ');
+        message = discordText.aliveConfirm;
+      }
 
-        var server = paramsArr[0];
-        var channel = (paramsArr.length > 1)
-          ? app.settings.channels.validChannels.indexOf(paramsArr[1])
-          : null;
-        var channel = (channel === -1)
-          ? app.settings.channels.validChannelsShort.indexOf(paramsArr[1])
-          : channel;
+      var confNum = addNotification(server, channel, boss, status, msg.author);
+      var serverPrefix = app.settings.servers[server].prefix;
 
-        if (!app.settings.servers[server]) {
-          bot.sendMessage(
-            msg.channel,
-            discordText.queryWrongServer.replace(/{server}/, server));
-          return;
+      message = message.replace(/{boss}/, app.settings.bosses[boss].name);
+      message = message.replace(/{channel}/,
+        app.settings.channels.channels[channel].replace(/{p}/, serverPrefix));
+      message = message.replace(/{confNum}/, confNum);
+      message = message.replace(/{maxConf}/, (status === 'alive')
+        ? ALIVE_MAX_CONF
+        : DEAD_MAX_CONF);
+
+      bot.sendMessage(msg.channel, message);
+
+      var stmt = db.prepare('INSERT INTO notifys (author_name, author_id, server, channel, boss, status, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?)');
+      stmt.run(msg.author.name, msg.author.id, server, channel, boss, status, currentUnixTimestamp(),
+        function(err) {
+          if (err) {
+            console.log(err);
+          } else {
+            //console.log(this.lastID);
+          }
         }
+      );
+    }
+  }
 
-        if (channel === -1 && channel !== null) {
-          bot.sendMessage(
-            msg.channel,
-            discordText.queryWrongChannel.replace(/{channel}/, paramsArr[1]));
-          return;
-        }
+  if (cmd === 'query') {
+    if (cmdParams === '') {
+      bot.sendMessage(msg.channel, discordText.queryHelp);
+    } else {
+      var paramsArr = cmdParams.split(' ');
 
-        if (channel !== null) { // Channel specific
-          var message = 'The following bosses are alive on ' + app.settings.servers[server].name + ':';
-          var pool = [];
+      var server = paramsArr[0];
+      var channel = (paramsArr.length > 1)
+        ? app.settings.channels.validChannels.indexOf(paramsArr[1])
+        : null;
+      var channel = (channel === -1)
+        ? app.settings.channels.validChannelsShort.indexOf(paramsArr[1])
+        : channel;
 
-          var bosses = app.status[server][channel];
+      if (!app.settings.servers[server]) {
+        bot.sendMessage(
+          msg.channel,
+          discordText.queryWrongServer.replace(/{server}/, server));
+        return;
+      }
 
-          for (var bkey in bosses) {
-            if (bosses.hasOwnProperty(bkey)) {
-              if (bosses[bkey].status === 'green') {
-                pool.push(bkey);
-              }
+      if (channel === -1 && channel !== null) {
+        bot.sendMessage(
+          msg.channel,
+          discordText.queryWrongChannel.replace(/{channel}/, paramsArr[1]));
+        return;
+      }
+
+      if (channel !== null) { // Channel specific
+        var message = 'The following bosses are alive on ' + app.settings.servers[server].name + ':';
+        var pool = [];
+
+        var bosses = app.status[server][channel];
+
+        for (var bkey in bosses) {
+          if (bosses.hasOwnProperty(bkey)) {
+            if (bosses[bkey].status === 'green') {
+              pool.push(bkey);
             }
           }
+        }
 
-          if (pool.length > 0) {
-            pool.forEach(function(bossKey) {
-              message = message + '\r\n**' + app.settings.bosses[bossKey].name + '**';
-            });
-          } else {
-            message = 'No bosses currently alive on ' + app.settings.servers[server].name;
-          }
-          bot.sendMessage(msg.channel, message);
-        } else { // Server specific
-          var message = 'Bosses are currently alive on the following channels:';
-          var bosses = app.settings.bosses;
+        if (pool.length > 0) {
+          pool.forEach(function(bossKey) {
+            message = message + '\r\n**' + app.settings.bosses[bossKey].name + '**';
+          });
+        } else {
+          message = 'No bosses currently alive on ' + app.settings.servers[server].name;
+        }
+        bot.sendMessage(msg.channel, message);
+      } else { // Server specific
+        var message = 'Bosses are currently alive on the following channels:';
+        var bosses = app.settings.bosses;
 
-          var bossesAlive = 0;
+        var bossesAlive = 0;
 
-          for (var bkey in bosses) {
-            if (bosses.hasOwnProperty(bkey)) {
-              var aliveOn = [];
+        for (var bkey in bosses) {
+          if (bosses.hasOwnProperty(bkey)) {
+            var aliveOn = [];
 
-              for (var ckey in app.status[server]) {
-                if (app.status[server].hasOwnProperty(ckey)) {
-                  if (app.status[server][ckey][bkey].status === 'green') {
-                    aliveOn.push(ckey);
-                    bossesAlive++;
-                  }
+            for (var ckey in app.status[server]) {
+              if (app.status[server].hasOwnProperty(ckey)) {
+                if (app.status[server][ckey][bkey].status === 'green') {
+                  aliveOn.push(ckey);
+                  bossesAlive++;
                 }
               }
+            }
 
-              if (aliveOn.length > 0) {
-                message = message + '\r\n**' + app.settings.bosses[bkey].name + ':** ';
-                aliveOn.forEach(function(chnl, i) {
-                  var punctuation = (i !== 0)
-                    ? ', '
-                    : '';
-                  message = message
-                    + punctuation
-                    + app.settings.channels.channels[chnl].replace(
-                      /{p}/, app.settings.servers[server].prefix);
-                });
-              }
+            if (aliveOn.length > 0) {
+              message = message + '\r\n**' + app.settings.bosses[bkey].name + ':** ';
+              aliveOn.forEach(function(chnl, i) {
+                var punctuation = (i !== 0)
+                  ? ', '
+                  : '';
+                message = message
+                  + punctuation
+                  + app.settings.channels.channels[chnl].replace(
+                    /{p}/, app.settings.servers[server].prefix);
+              });
             }
           }
+        }
 
-          if (bossesAlive === 0) {
-            bot.sendMessage(msg.channel , 'No bosses currently alive on ' + app.settings.servers[server].name);
-          } else {
-            bot.sendMessage(msg.channel, message);
-          }
+        if (bossesAlive === 0) {
+          bot.sendMessage(msg.channel , 'No bosses currently alive on ' + app.settings.servers[server].name);
+        } else {
+          bot.sendMessage(msg.channel, message);
         }
       }
     }
+  }
 
-    if (cmd === 'b4ckup') {
-      saveStatusToFile();
-      bot.sendMessage(msg.channel, 'Backed up status file.');
-    }
+  if (cmd === 'b4ckup') {
+    saveStatusToFile();
+    bot.sendMessage(msg.channel, 'Backed up status file.');
+  }
 
-    var stmt = db.prepare('INSERT INTO commands (author_name, author_id, cmd, params, timestamp) VALUES(?, ?, ?, ?, ?)');
-    stmt.run(msg.author.name, msg.author.id, cmd, cmdParams, currentUnixTimestamp(),
+  var stmt = db.prepare('INSERT INTO commands (author_name, author_id, cmd, params, timestamp) VALUES(?, ?, ?, ?, ?)');
+  stmt.run(msg.author.name, msg.author.id, cmd, cmdParams, currentUnixTimestamp(),
     function(err) {
       if (err) {
         console.log(err);

@@ -13,7 +13,7 @@ router.get('/:server', function(req, res, next) {
       server: req.app.settings.servers[server],
       bosses: req.app.settings.bosses,
       channels: req.app.settings.channels,
-      status: req.app.status[server]
+      status: req.app.status[server],
     });
   } else {
     res.redirect('/');

@@ -1,16 +1,16 @@
 var channels = [
-  "Velia {p}1",
-  "Velia {p}2",
-  "Balenos {p}1",
-  "Balenos {p}2",
-  "Calpheon {p}1",
-  "Calpheon {p}2",
-  "Serendia {p}1",
-  "Serendia {p}2",
-  "Mediah {p}1",
-  "Mediah {p}2",
-  "Valencia {p}1",
-  "Valencia {p}2"
+  'Velia {p}1',
+  'Velia {p}2',
+  'Balenos {p}1',
+  'Balenos {p}2',
+  'Calpheon {p}1',
+  'Calpheon {p}2',
+  'Serendia {p}1',
+  'Serendia {p}2',
+  'Mediah {p}1',
+  'Mediah {p}2',
+  'Valencia {p}1',
+  'Valencia {p}2',
 ];
 
 var validChannels = [ 'velia1', 'balenos1', 'balenos2', 'calpheon1',
