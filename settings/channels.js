@@ -21,7 +21,7 @@ var validChannelsShort = [ 've1', 'b1', 'b2', 'c1', 'c2', 's1', 's2', 'm1',
   'm2', 'va1', 'va2', 've2' ];
 
 module.exports = {
-	channels: channels,
-	validChannels: validChannels,
-	validChannelsShort: validChannelsShort
+  channels: channels,
+  validChannels: validChannels,
+  validChannelsShort: validChannelsShort
 };
