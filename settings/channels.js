@@ -13,12 +13,35 @@ var channels = [
   'Valencia {p}2',
 ];
 
-var validChannels = [ 'velia1', 'balenos1', 'balenos2', 'calpheon1',
-  'calpheon2', 'serendia1', 'serendia2', 'mediah1', 'mediah2', 'valencia1',
-  'valencia2', 'velia2' ];
+var validChannels = [
+  'velia1',
+  'velia2',
+  'balenos1',
+  'balenos2',
+  'calpheon1',
+  'calpheon2',
+  'serendia1',
+  'serendia2',
+  'mediah1',
+  'mediah2',
+  'valencia1',
+  'valencia2',
+];
 
-var validChannelsShort = [ 've1', 'b1', 'b2', 'c1', 'c2', 's1', 's2', 'm1',
-  'm2', 'va1', 'va2', 've2' ];
+var validChannelsShort = [
+  've1',
+  've2',
+  'b1',
+  'b2',
+  'c1',
+  'c2',
+  's1',
+  's2',
+  'm1',
+  'm2',
+  'va1',
+  'va2',
+];
 
 module.exports = {
   channels: channels,
