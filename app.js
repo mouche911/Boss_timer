@@ -137,7 +137,6 @@ function convertToCssStatus(status) {
   return cssStatus;
 }
 
-
 /* STATUS HANDLING */
 function addNotification(server, channel, boss, status, user) {
   var subTime = currentUnixTimestamp();
@@ -181,12 +180,14 @@ function updateStatus(server, channel, boss, status, serverWide) {
 
   var cssStatus = convertToCssStatus(status);
 
-  if (serverWide && status === 'alive') { // Update all channels
+  if (serverWide && status === 'alive') {
+    // Update all channels
     for (var i = 0; i < app.settings.channels.channels.length; i++) {
       app.status[server][i][boss]['status'] = cssStatus;
       app.status[server][i][boss]['statusChanged'] = currentUnixTimestamp();
     }
-  } else { // Update specific channel
+  } else {
+    // Update specific channel
     app.status[server][channel][boss]['status'] = cssStatus;
     app.status[server][channel][boss]['statusChanged'] = currentUnixTimestamp();
   }
@@ -273,12 +274,16 @@ bot.on('message', function(msg) {
   var cmdParams = '';
   var isMention = false;
 
-  if (msg.content.indexOf(bot.user.mention()) === 0) { // Bot is mentioned at beginning of message
-    if (msg.content.split(' ').length === 0) { // mention w/ no command
+  // Bot is mentioned at beginning of message
+  if (msg.content.indexOf(bot.user.mention()) === 0) {
+    if (msg.content.split(' ').length === 0) {
+      // mention w/ no command
       // do nothing
-    } else if (msg.content.split(' ').length === 1) { // mention w/ command
+    } else if (msg.content.split(' ').length === 1) {
+      // mention w/ command
       cmd = msg.content.substring(mention.length + 1);
-    } else if (msg.content.split(' ').length > 1) { // mention w/ cmd + params
+    } else if (msg.content.split(' ').length > 1) {
+      // mention w/ cmd + params
       cmd = msg.content.substring(mention.length + 1, getPosition(msg.content, ' ', 2));
       cmdParams = msg.content.substring(mention.length + cmd.length + 1);
     }
@@ -292,7 +297,8 @@ bot.on('message', function(msg) {
     } else {
       cmd = msg.content;
     }
-  } else { // otherwise, do nothing
+  } else {
+    // Do nothing
     return;
   }
 
@@ -428,7 +434,8 @@ bot.on('message', function(msg) {
         return;
       }
 
-      if (channel !== null) { // Channel specific
+      // Channel specific
+      if (channel !== null) {
         var message = 'The following bosses are alive on ' + app.settings.servers[server].name + ':';
         var pool = [];
 
@@ -450,7 +457,8 @@ bot.on('message', function(msg) {
           message = 'No bosses currently alive on ' + app.settings.servers[server].name;
         }
         bot.sendMessage(msg.channel, message);
-      } else { // Server specific
+      } else {
+        // Server specific
         var message = 'Bosses are currently alive on the following channels:';
         var bosses = app.settings.bosses;
 
