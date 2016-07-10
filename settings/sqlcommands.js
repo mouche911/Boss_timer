@@ -1,3 +1,4 @@
+// Table Creation
 var createNotifys = 'CREATE TABLE IF NOT EXISTS notifys '
   + '("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, '
   + '"author_name" TEXT(100) NOT NULL, '
@@ -16,11 +17,11 @@ var createCommands = 'CREATE TABLE IF NOT EXISTS commands '
   + '"params" TEXT(100) NOT NULL, '
   + '"timestamp" INTEGER NOT NULL)';
 
-
+// Inserts
 var insertNotify = 'INSERT INTO notifys '
   + '(author_name, author_id, server, channel, boss, status, timestamp) '
   + 'VALUES (?, ?, ?, ?, ?, ?, ?)';
-
+  
 var insertCommand = 'INSERT INTO commands '
   + '(author_name, author_id, cmd, params, timestamp) '
   + 'VALUES(?, ?, ?, ?, ?)';

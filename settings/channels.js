@@ -46,5 +46,5 @@ var validChannelsShort = [
 module.exports = {
   channels: channels,
   validChannels: validChannels,
-  validChannelsShort: validChannelsShort
+  validChannelsShort: validChannelsShort,
 };
