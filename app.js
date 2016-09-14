@@ -484,7 +484,7 @@ bot.on('message', function(msg) {
         }
 
         if (bossesAlive === 0) {
-          sendMessage(msg.channel , 'No bosses currently alive on ' + app.settings.servers[server].name);
+          msg.channel.sendMessage('No bosses currently alive on ' + app.settings.servers[server].name);
         } else {
           msg.channel.sendMessage(message);
         }
