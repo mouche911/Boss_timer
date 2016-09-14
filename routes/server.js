@@ -12,7 +12,7 @@ router.get('/:server', function(req, res, next) {
       serverid: server,
       server: req.app.settings.servers[server],
       bosses: req.app.settings.bosses,
-      channels: req.app.settings.channels,
+      channels: req.app.settings.channels.channels,
       status: req.app.status[server],
     });
   } else {
