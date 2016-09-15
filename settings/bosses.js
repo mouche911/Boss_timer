@@ -34,12 +34,19 @@ var bosses = {
     despawnTime: 10800000,
     serverWide: true,
   },
-  "karanda": {
-    "name": "Karanda",
-    "minRespawn": 28800000,
-    "maxRespawn": 43200000,
-    "despawnTime": 10800000,
-    "serverWide": true
+  karanda: {
+    name: "Karanda",
+    minRespawn: 28800000,
+    maxRespawn: 43200000,
+    despawnTime: 10800000,
+    serverWide: true
+  },
+  kutum: {
+    name: "Ancient Kutum",
+    minRespawn: 28800000,
+    maxRespawn: 43200000,
+    despawnTime: 10800000,
+    serverWide: true
   }
 };
 

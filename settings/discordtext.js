@@ -15,7 +15,7 @@ var notifyHelp = '__***notify***__ allows you to update me on your boss '
   + 'Channels: `velia1`, `balenos1`, `balenos2`, `calpheon1`, `calpheon2`, '
   + '`serendia1`, `serendia2`, `mediah1`, `mediah2`, `valencia1`, `valencia2`, '
   + 'and `velia2`.\r\n'
-  + 'Bosses: `mudster`, `rednose`, `bheg`, `dimtree`, `karanda`, and `kzarka`.\r\n'
+  + 'Bosses: `mudster`, `rednose`, `bheg`, `dimtree`, `karanda`, `kutum`, and `kzarka`.\r\n'
   + 'Status: `dead` or `alive`!';
 
 var queryHelp = '__***query***__ will tell you the status of each boss.\r\n'
