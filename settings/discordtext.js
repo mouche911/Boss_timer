@@ -11,10 +11,9 @@ var notifyHelp = '__***notify***__ allows you to update me on your boss '
   + 'Use the following format:\r\n\r\n'
   + '`notify {server} {channel} {boss} {status}`\r\n'
   + 'ex: `notify alustin mediah1 bheg dead`\r\n\r\n'
-  + 'Servers: `alustin`, `croxus`, `edan`, `jordine`, `orwen`, and `uno`.\r\n'
-  + 'Channels: `velia1`, `balenos1`, `balenos2`, `calpheon1`, `calpheon2`, '
-  + '`serendia1`, `serendia2`, `mediah1`, `mediah2`, `valencia1`, `valencia2`, '
-  + 'and `velia2`.\r\n'
+  + 'Servers: `eu` and `na`.\r\n'
+  + 'Channels: `olvia1`(-2), `balenos1`(-6), `calpheon1`(-6), `mediah1`(-6), '
+  + '`serendia1`(-6), `valencia1`(-6), and `velia1`(-6).\r\n'
   + 'Bosses: `mudster`, `rednose`, `bheg`, `dimtree`, `karanda`, `kutum`, and `kzarka`.\r\n'
   + 'Status: `dead` or `alive`!';
 
@@ -22,10 +21,9 @@ var queryHelp = '__***query***__ will tell you the status of each boss.\r\n'
   + 'Just let me know the Server and Channel, like so:\r\n\r\n'
   + '`query {server} {channel(optional)}`\r\n'
   + 'ex: `query alustin mediah1`\r\n\r\n'
-  + 'Servers: `alustin`, `croxus`, `edan`, `jordine`, `orwen`, and `uno`.\r\n'
-  + 'Channels: `velia1`, `balenos1`, `balenos2`, `calpheon1`, `calpheon2`, '
-  + '`serendia1`, `serendia2`, `mediah1`, `mediah2`, `valencia1`, `valencia2`, '
-  + 'and `velia2`';
+  + 'Servers: `eu` and `na`.\r\n'
+  + 'Channels: `olvia1`(-2), `balenos1`(-6), `calpheon1`(-6), `mediah1`(-6), '
+  + '`serendia1`(-6), `valencia1`(-6), and `velia1`(-6).';
 
 // Error messages for Notify command
 var notifyParamsMin = 'You holding out on me? I was promised 4 parameters!\r\n'
