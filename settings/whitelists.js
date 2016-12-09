@@ -5,12 +5,8 @@ var channelNames = [
   'talkbot',
   'notifybot',
   'bossbot',
-  'alustin-bosses',
-  'croxus-bosses',
-  'edan-bosses',
-  'jordine-bosses',
-  'orwen-bosses',
-  'uno-bosses',
+  'eu-bosses',
+  'na-bosses',
 ];
 
 /**
