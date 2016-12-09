@@ -194,7 +194,6 @@ function updateStatus(server, channel, boss, status, serverWide) {
 
   // Create Message
   var message = '';
-  var serverPrefix = app.settings.servers[server].prefix;
 
   // Select relevant message base
   if (serverWide && status === 'alive') {
@@ -207,7 +206,7 @@ function updateStatus(server, channel, boss, status, serverWide) {
 
   message = message.replace(/{server}/, app.settings.servers[server].name);
   message = message.replace(/{boss}/, app.settings.bosses[boss].name);
-  message = message.replace(/{channel}/, app.settings.channels.channels[channel].replace(/{p}/, serverPrefix));
+  message = message.replace(/{channel}/, app.settings.channels.channels[channel]);
 
   // Notify specific channels on all servers
   var servers = bot.guilds;
@@ -376,11 +375,10 @@ bot.on('message', function(msg) {
       }
 
       var confNum = addNotification(server, channel, boss, status, msg.author);
-      var serverPrefix = app.settings.servers[server].prefix;
 
       message = message.replace(/{boss}/, app.settings.bosses[boss].name);
       message = message.replace(/{channel}/,
-        app.settings.channels.channels[channel].replace(/{p}/, serverPrefix));
+        app.settings.channels.channels[channel]);
       message = message.replace(/{confNum}/, confNum);
       message = message.replace(/{maxConf}/, (status === 'alive')
         ? ALIVE_MAX_CONF
@@ -476,8 +474,7 @@ bot.on('message', function(msg) {
                   : '';
                 message = message
                   + punctuation
-                  + app.settings.channels.channels[chnl].replace(
-                    /{p}/, app.settings.servers[server].prefix);
+                  + app.settings.channels.channels[chnl];
               });
             }
           }
