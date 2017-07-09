@@ -7,6 +7,7 @@ var channelNames = [
   'bossbot',
   'eu-bosses',
   'na-bosses',
+  'ihana',
 ];
 
 /**
